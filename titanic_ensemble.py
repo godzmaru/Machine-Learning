@@ -26,6 +26,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.linear_model import LogisticRegression
 
+
 def process_title(debug = False):
     global df
     title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
@@ -49,7 +50,7 @@ def process_title(debug = False):
     
     if(debug == True):
         df.info()
-    
+ 
 
 def process_sex():
     global df
@@ -108,7 +109,7 @@ def process_age(choice = 1):
         
         df['Age'][np.isnan(df['Age'])] = age_random
     
-    elif(choice ==2):
+    elif(choice ==2):       #NOTE: convert sex first from object into int64
         # rev 0.0
         age_df = df[['Age', 'Survived', 'Pclass', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Title']]
         # instantiate X and y for training model to predict Age
@@ -145,7 +146,6 @@ def process_age(choice = 1):
 
 def process_cabin(debug = False):
     global df
-    import seaborn as sns
     '''
     passengers with a cabin have generally more chance to survive
     set to True to see this
@@ -229,7 +229,7 @@ if __name__ == '__main__':
     # opening and reading from csvfile
     train_df = pd.read_csv('../Machine Learning/titanic/train.csv')
     test_df = pd.read_csv('../Machine Learning/titanic/test.csv')
-
+    
     # merge dataframes
     df = pd.concat([train_df, test_df])
     # re number the df index
@@ -239,9 +239,9 @@ if __name__ == '__main__':
     # re index the starting column from 1 to 0
     df = df.reindex_axis(train_df.columns, axis = 1)
     
+    process_title()
     process_cabin()
     process_ticket()
-    process_title()
     process_sex()
     process_embarkation()
     process_fare()
@@ -318,6 +318,7 @@ if __name__ == '__main__':
     result = candidate.predict(test)
     score = round(candidate.score(X_train, y_train) * 100, 2)
     print("\nScore", score)
-   
-    submission = pd.DataFrame({"PassengerId": test_df["PassengerId"],"Survived": result})
-    submission.to_csv('../Machine Learning/output.csv', index=False)
+    '''
+    submission = pd.DataFrame({"PassengerId": test_df["PassengerId"], "Survived": result})
+    submission.to_csv('../Machine Learning/submission_titanic.csv', index=False)
+    '''
